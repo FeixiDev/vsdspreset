@@ -1,6 +1,7 @@
 #! /usr/bin/env python3
 from base import Base
 
+
 class TargetCLIConfig:
     def __init__(self, logger):
         self.base = Base(logger)
@@ -33,8 +34,8 @@ class TargetCLIConfig:
                     self.logger.log(f"auto_enable_tpgt配置失败：{command}")
                     return False
                 else:
-                    return True    
-                
+                    return True
+
         except Exception as e:
             self.logger.log(f"检查 targetcli 配置失败: {e}")
             return False
