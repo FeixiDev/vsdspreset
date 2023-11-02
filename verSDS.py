@@ -1,6 +1,7 @@
 #! /usr/bin/env python3
 from base import Base
 
+
 class VersaSDS:
     def __init__(self, logger):
         self.base = Base(logger)
@@ -16,7 +17,7 @@ class VersaSDS:
         except Exception as e:
             print(f"禁用{service_name}发生错误：{e}")
             self.logger.log(f"禁用{service_name}发生错误：{e}")  # debug
-            return False     
+            return False
 
     # 检查服务是否已禁用
     def is_service_disabled(self, service_name):
@@ -33,4 +34,3 @@ class VersaSDS:
             print(f"检查{service_name}状态发生错误：{e}")
             self.logger.log(f"检查{service_name}状态发生错误：{e}")  # debug
             return False
-
