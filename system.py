@@ -3,6 +3,7 @@
 from base import Base
 from prettytable import PrettyTable
 
+
 class System:
     def __init__(self, logger):
         self.base = Base(logger)
@@ -13,27 +14,27 @@ class System:
         try:
             command = f"sudo systemctl stop unattended-upgrades"
             result = self.base.com(command)
-            self.logger.log(f"执行结果：{result}") 
+            self.logger.log(f"执行结果：{result}")
             return True
         except Exception as e:
             print(f"停止无人值守升级发生错误：{e}")
-            self.logger.log(f"停止无人值守升级发生错误：{e}") #debug
+            self.logger.log(f"停止无人值守升级发生错误：{e}")  # debug
             return False
-        
-    # 禁用无人值守升级 
+
+    # 禁用无人值守升级
     def disable_unattended_upgrades(self):
         try:
             command = f"sudo systemctl disable unattended-upgrades"
             result = self.base.com(command)
-            self.logger.log(f"执行结果：{result}") 
+            self.logger.log(f"执行结果：{result}")
             return True
         except Exception as e:
             print(f"禁用无人值守升级发生错误：{e}")
-            self.logger.log(f"禁用无人值守升级发生错误：{e}") #debug
+            self.logger.log(f"禁用无人值守升级发生错误：{e}")  # debug
             return False
-        
+
     # 修改配置文件参数
-    def modify_configuration_file_parameters(self): # 权限问题？
+    def modify_configuration_file_parameters(self):  # 权限问题？
         try:
             file_path = '/etc/apt/apt.conf.d/20auto-upgrades'
             self.logger.log(f"修改配置文件参数：{file_path}")
@@ -59,9 +60,9 @@ class System:
             return True
         except Exception as e:
             print(f"修改配置文件参数发生错误：{e}")
-            self.logger.log(f"修改配置文件参数发生错误：{e}") #debug
+            self.logger.log(f"修改配置文件参数发生错误：{e}")  # debug
             return False
-        
+
     # 检查是否禁用无人值守升级成功
     def check_unattended_upgrades(self):
         try:
@@ -74,9 +75,9 @@ class System:
                 return True
         except Exception as e:
             print(f"检查是否禁用无人值守升级发生错误：{e}")
-            self.logger.log(f"检查是否禁用无人值守升级发生错误：{e}") #debug
-            return False    
-        
+            self.logger.log(f"检查是否禁用无人值守升级发生错误：{e}")  # debug
+            return False
+
     # 检查配置文件参数是否修改成功
     def check_configuration_file(self):
         try:
@@ -85,20 +86,22 @@ class System:
             result_Update_Package_Lists = self.base.com(command1)
             self.logger.log(f"执行结果：{result_Update_Package_Lists}")
             result_Unattended_Upgrade = self.base.com(command2)
-            self.logger.log(f"执行结果：{result_Unattended_Upgrade}") 
+            self.logger.log(f"执行结果：{result_Unattended_Upgrade}")
             if "0" not in result_Update_Package_Lists and result_Unattended_Upgrade:
                 return False
             else:
                 return True
         except Exception as e:
             print(f"检查配置文件参数是否修改成功发生错误：{e}")
-            self.logger.log(f"检查配置文件参数是否修改成功发生错误：{e}") #debug
-            return False 
+            self.logger.log(f"检查配置文件参数是否修改成功发生错误：{e}")  # debug
+            return False
     # 显示系统状态
+
     def display_system_status(self):
         try:
             # 服务名称
-            services = ["drbd", "linstor-controller", "rtslib-fb-targetctl", "linstor-satellite", "pacemaker", "corosync"]
+            services = ["drbd", "linstor-controller", "rtslib-fb-targetctl",
+                        "linstor-satellite", "pacemaker", "corosync"]
 
             # 创建一个 PrettyTable 来展示状态
             status_table = PrettyTable()
