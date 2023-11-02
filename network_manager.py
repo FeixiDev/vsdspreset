@@ -1,13 +1,14 @@
 #! /usr/bin/env python3
 from base import Base
 
+
 class NetworkManager:
     def __init__(self, logger):
         self.base = Base(logger)
         self.logger = logger
         self.network_manager_config = "/etc/NetworkManager/NetworkManager.conf"
         self.netplan_file = '/etc/netplan/01-netcfg.yaml'
-    
+
     def set_network_manager_interfaces(self):
         try:
 
@@ -21,7 +22,8 @@ class NetworkManager:
             with open(self.network_manager_config, "r") as f:
                 config_content = f.read()
 
-            config_content = config_content.replace("managed=false", "managed=true")
+            config_content = config_content.replace(
+                "managed=false", "managed=true")
 
             with open(self.network_manager_config, "w") as f:
                 f.write(config_content)
@@ -35,7 +37,7 @@ class NetworkManager:
         except Exception as e:
             print(f"配置 NetworkManager 管理接口失败：{e}")
             return False
-    
+
     def restart_network_manager_service(self):
         try:
             # 重启 NetworkManager 服务
@@ -44,7 +46,7 @@ class NetworkManager:
         except Exception as e:
             self.logger.log(f"重启 NetworkManager 服务失败：{e}")
             return False
-        
+
     def update_netplan_config(self):
         try:
 
@@ -61,7 +63,8 @@ class NetworkManager:
             for line in lines:
                 # 将 renderer:networkd 更改为 renderer:NetworkManager
                 if 'renderer: networkd' in line:
-                    updated_lines.append(line.replace('renderer: networkd', 'renderer: NetworkManager'))
+                    updated_lines.append(line.replace(
+                        'renderer: networkd', 'renderer: NetworkManager'))
                 # 删除 ethernets 和其他配置
                 elif 'ethernets' in line:
                     while '  ' in line:
