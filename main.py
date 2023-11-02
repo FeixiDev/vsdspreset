@@ -8,17 +8,19 @@ from targetcli import TargetCLIConfig
 from verSDS import VersaSDS
 
 # 禁用系统自动升级
+
+
 def disable_system_upgrades(system):
     if not system.stop_unattended_upgrades():
         print("程序将继续执行")
     if not system.disable_unattended_upgrades():
         print("程序将继续执行")
     if not system.check_unattended_upgrades():
-        print("禁用无人值守升级失败，程序将继续执行")  
+        print("禁用无人值守升级失败，程序将继续执行")
     if not system.modify_configuration_file_parameters():
         print("程序将继续执行")
     if not system.check_configuration_file():
-        print("配置文件参数修改失败，程序将继续执行")  
+        print("配置文件参数修改失败，程序将继续执行")
 
 
 # 禁用 VersaSDS 服务开机自启
@@ -30,13 +32,13 @@ def disable_VersaSDS_service_startup(versds):
     if not versds.disable_service("linstor-controller"):
         print(f"禁用linstor-controller程序执行失败，{note}")
     if not versds.disable_service("rtslib-fb-targetctl"):
-        print(f"禁用rtslib-fb-targetctl程序执行失败，{note}")  
+        print(f"禁用rtslib-fb-targetctl程序执行失败，{note}")
     if not versds.disable_service("linstor-satellite"):
         print(f"禁用linstor-satellite程序执行失败，{note}")
     if not versds.disable_service("pacemaker"):
         print(f"禁用pacemaker程序执行失败，{note}")
     if not versds.disable_service("corosync"):
-        print(f"禁用corosync程序执行失败，{note}")    
+        print(f"禁用corosync程序执行失败，{note}")
 
     # 调用通用方法检查不同的服务
     if not versds.is_service_disabled("drbd"):
@@ -44,13 +46,13 @@ def disable_VersaSDS_service_startup(versds):
     if not versds.is_service_disabled("linstor-controller"):
         print(f"禁用linstor-controller服务失败，{note}")
     if not versds.is_service_disabled("rtslib-fb-targetctl"):
-        print(f"禁用rtslib-fb-targetctl服务失败，{note}")  
+        print(f"禁用rtslib-fb-targetctl服务失败，{note}")
     if not versds.is_service_disabled("linstor-satellite"):
         print(f"禁用linstor-satellite服务失败，{note}")
     if not versds.is_service_disabled("pacemaker"):
         print(f"禁用pacemaker服务失败，{note}")
     if not versds.is_service_disabled("corosync"):
-        print(f"禁用corosync服务失败，{note}")    
+        print(f"禁用corosync服务失败，{note}")
 
 
 # 配置 Network Manager
@@ -74,26 +76,29 @@ def initialize_targetcli_configuration(targetcli):
     if not targetcli.configure_targetcli("auto_add_mapped_luns=false"):
         print(note)
     elif not targetcli.check_targetcli_configuration("auto_add_mapped_luns"):
-        print(note)    
+        print(note)
     if not targetcli.configure_targetcli("auto_enable_tpgt=true"):
-        print(note) 
+        print(note)
     elif not targetcli.check_targetcli_configuration("auto_enable_tpgt"):
         print(note)
+
 
 def display_system_status(system):
     system.display_system_status()
 
+
 def main():
     parser = argparse.ArgumentParser(description='None')
-    parser.add_argument('-d', action='store_true', help='Enable display_system_status')
+    parser.add_argument('-d', action='store_true',
+                        help='Enable display_system_status')
     args = parser.parse_args()
-    
+
     logger = Logger("log")
     system = System(logger)
     versds = VersaSDS(logger)
     network_manager = NetworkManager(logger)
     targetcli = TargetCLIConfig(logger)
-    
+
     disable_system_upgrades(system)
 
     disable_VersaSDS_service_startup(versds)
@@ -104,6 +109,7 @@ def main():
 
     if args.d:
         display_system_status(system)
+
 
 if __name__ == '__main__':
     main()
