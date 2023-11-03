@@ -13,9 +13,9 @@ class NetworkManager:
         try:
 
             # 修改权限
-            # command = (f"sudo chmod 666 {self.network_manager_config}")
-            # self.base.com(command)
-            # self.logger.log("修改/etc/fstab文件权限为666")
+            command = (f"sudo chmod 666 {self.network_manager_config}")
+            self.base.com(command)
+            self.logger.log(f"修改{self.network_manager_config}文件权限为666")
 
             # 修改 NetworkManager 配置文件
             config_content = ""
@@ -29,9 +29,9 @@ class NetworkManager:
                 f.write(config_content)
 
             # 修改权限
-            # command = (f"sudo chmod 644 {self.network_manager_config}")
-            # self.base.com(command)
-            # self.logger.log("修改/etc/fstab文件权限为644")
+            command = (f"sudo chmod 644 {self.network_manager_config}")
+            self.base.com(command)
+            self.logger.log(f"修改{self.network_manager_config}文件权限为644")
 
             return True
         except Exception as e:
@@ -51,9 +51,9 @@ class NetworkManager:
         try:
 
             # 修改权限
-            # command = (f"sudo chmod 666 {self.netplan_file}")
-            # self.base.com(command)
-            # self.logger.log("修改/etc/fstab文件权限为666")
+            command = (f"sudo chmod 666 {self.netplan_file}")
+            self.base.com(command)
+            self.logger.log(f"修改{self.netplan_file}文件权限为666")
 
             # 打开 netplan 配置文件进行修改
             with open(self.netplan_file, 'r') as file:
@@ -78,9 +78,9 @@ class NetworkManager:
                 file.writelines(updated_lines)
 
             # 修改权限
-            # command = (f"sudo chmod 644 {self.netplan_file}")
-            # self.base.com(command)
-            # self.logger.log("修改/etc/fstab文件权限为644")
+            command = (f"sudo chmod 644 {self.netplan_file}")
+            self.base.com(command)
+            self.logger.log(f"修改{self.netplan_file}文件权限为644")
 
             return True
         except Exception as e:
