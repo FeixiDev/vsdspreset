@@ -67,6 +67,8 @@ def setup_network_manager(network_manager):
         print(f"应用 Netplan 配置失败")
 
 # 初始化 targetcli 配置
+
+
 def initialize_targetcli_configuration(targetcli):
     note = "初始化 targetcli 配置失败"
     if not targetcli.configure_targetcli("auto_add_default_portal=false"):
@@ -91,6 +93,14 @@ def main():
     parser = argparse.ArgumentParser(description='None')
     parser.add_argument('-d', action='store_true',
                         help='Enable display_system_status')
+    parser.add_argument('-u', action='store_true',
+                        help='Disable system upgrades')
+    parser.add_argument('-v', action='store_true',
+                        help='Disable VersaSDS service startup')
+    parser.add_argument('-n', action='store_true',
+                        help='Setup Network Manager')
+    parser.add_argument('-i', action='store_true',
+                        help='Initialize TargetCLI Configuration')
     args = parser.parse_args()
 
     logger = Logger("log")
@@ -99,16 +109,21 @@ def main():
     network_manager = NetworkManager(logger)
     targetcli = TargetCLIConfig(logger)
 
-    disable_system_upgrades(system)
-
-    disable_VersaSDS_service_startup(versds)
-
-    setup_network_manager(network_manager)
-
-    initialize_targetcli_configuration(targetcli)
-
-    if args.d:
+    if args.u:
+        disable_system_upgrades(system)
+    elif args.v:
+        disable_VersaSDS_service_startup(versds)
+    elif args.n:
+        setup_network_manager(network_manager)
+    elif args.i:
+        initialize_targetcli_configuration(targetcli)
+    elif args.d:
         display_system_status(system)
+    else:
+        disable_system_upgrades(system)
+        disable_VersaSDS_service_startup(versds)
+        setup_network_manager(network_manager)
+        initialize_targetcli_configuration(targetcli)
 
 
 if __name__ == '__main__':
