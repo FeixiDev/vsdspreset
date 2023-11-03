@@ -1,5 +1,5 @@
 #! /usr/bin/env python3
-
+import os
 from base import Base
 from prettytable import PrettyTable
 
@@ -40,6 +40,11 @@ class System:
             self.logger.log(f"修改配置文件参数：{file_path}")
             new_content = ""
 
+            # 修改权限
+            command = (f"sudo chmod 666 {file_path}")
+            self.base.com(command)
+            self.logger.log(f"修改{file_path}文件权限为666")
+
             # 打开文件并读取内容
             with open(file_path, 'r') as file:
                 lines = file.readlines()
@@ -57,6 +62,11 @@ class System:
             with open(file_path, 'w') as file:
                 file.write(new_content)
 
+            # 修改权限
+            command = (f"sudo chmod 644 {file_path}")
+            self.base.com(command)
+            self.logger.log(f"修改{file_path}文件权限为644")
+
             return True
         except Exception as e:
             print(f"修改配置文件参数发生错误：{e}")
@@ -68,11 +78,11 @@ class System:
         try:
             command = f"sudo systemctl is-enabled unattended-upgrades"
             result = self.base.com(command)
-            self.logger.log(f"执行结果：{result}")
-            if "disabled" not in result:
-                return False
-            else:
+            self.logger.log(f"执行结果：{str(result)}")
+            if "disabled" in result or "non-zero" in result:
                 return True
+            else:
+                return False
         except Exception as e:
             print(f"检查是否禁用无人值守升级发生错误：{e}")
             self.logger.log(f"检查是否禁用无人值守升级发生错误：{e}")  # debug
