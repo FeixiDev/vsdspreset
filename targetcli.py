@@ -10,7 +10,7 @@ class TargetCLIConfig:
     def configure_targetcli(self, buffer):
         try:
             # 配置 targetcli
-            command = f"sudo targetcli set global {buffer}"
+            command = f"targetcli set global {buffer}"
             self.base.com(command)
             self.logger.log(f"执行命令：{command}")
             return True
@@ -21,7 +21,7 @@ class TargetCLIConfig:
     def check_targetcli_configuration(self, buffer):
         try:
             # 检查 targetcli 配置
-            command = f"sudo targetcli get global {buffer}"
+            command = f"targetcli get global {buffer}"
 
             if buffer == "auto_add_default_portal" or buffer == "auto_add_mapped_luns":
                 if "false" not in self.base.com(command):
