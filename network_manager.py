@@ -13,7 +13,7 @@ class NetworkManager:
         try:
 
             # 修改权限
-            command = (f"sudo chmod 666 {self.network_manager_config}")
+            command = (f"chmod 666 {self.network_manager_config}")
             self.base.com(command)
             self.logger.log(f"修改{self.network_manager_config}文件权限为666")
 
@@ -29,7 +29,7 @@ class NetworkManager:
                 f.write(config_content)
 
             # 修改权限
-            command = (f"sudo chmod 644 {self.network_manager_config}")
+            command = (f"chmod 644 {self.network_manager_config}")
             self.base.com(command)
             self.logger.log(f"修改{self.network_manager_config}文件权限为644")
 
@@ -41,7 +41,7 @@ class NetworkManager:
     def restart_network_manager_service(self):
         try:
             # 重启 NetworkManager 服务
-            self.base.com("sudo systemctl restart NetworkManager.service")
+            self.base.com("systemctl restart NetworkManager.service")
             return True
         except Exception as e:
             self.logger.log(f"重启 NetworkManager 服务失败：{e}")
@@ -51,7 +51,7 @@ class NetworkManager:
         try:
 
             # 修改权限
-            command = (f"sudo chmod 666 {self.netplan_file}")
+            command = (f"chmod 666 {self.netplan_file}")
             self.base.com(command)
             self.logger.log(f"修改{self.netplan_file}文件权限为666")
 
@@ -78,7 +78,7 @@ class NetworkManager:
                 file.writelines(updated_lines)
 
             # 修改权限
-            command = (f"sudo chmod 644 {self.netplan_file}")
+            command = (f"chmod 644 {self.netplan_file}")
             self.base.com(command)
             self.logger.log(f"修改{self.netplan_file}文件权限为644")
 
@@ -90,7 +90,7 @@ class NetworkManager:
     def apply_netplan_config(self):
         try:
             # 应用 Netplan 配置
-            self.base.com("sudo netplan apply")
+            self.base.com("netplan apply")
             return True
         except Exception as e:
             self.logger.log(f"应用 Netplan 配置失败：{e}")
