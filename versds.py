@@ -12,7 +12,7 @@ class VersaSDS:
         try:
             command = f"systemctl disable {service_name}"
             result = self.base.com(command)
-            self.logger.log(f"执行结果：{result}")
+            self.logger.log(f"执行命令：{command}")
             return True
         except Exception as e:
             print(f"禁用{service_name}发生错误：{e}")
@@ -23,7 +23,8 @@ class VersaSDS:
     def is_service_disabled(self, service_name):
         try:
             command = f"systemctl is-enabled {service_name}"
-            result = self.base.com(command)
+            result = self.base.com(command).stdout
+            self.logger.log(f"执行命令：{command} 结果：{result}")
             if result.strip() == "disabled":
                 self.logger.log(f"{service_name} 已禁用")
                 return True
