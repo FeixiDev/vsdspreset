@@ -10,7 +10,7 @@ class VersaSDS:
     # 禁用系统服务
     def disable_service(self, service_name):
         try:
-            command = f"sudo systemctl disable {service_name}"
+            command = f"systemctl disable {service_name}"
             result = self.base.com(command)
             self.logger.log(f"执行结果：{result}")
             return True
@@ -22,7 +22,7 @@ class VersaSDS:
     # 检查服务是否已禁用
     def is_service_disabled(self, service_name):
         try:
-            command = f"sudo systemctl is-enabled {service_name}"
+            command = f"systemctl is-enabled {service_name}"
             result = self.base.com(command)
             if result.strip() == "disabled":
                 self.logger.log(f"{service_name} 已禁用")
