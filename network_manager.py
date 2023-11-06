@@ -50,6 +50,7 @@ class NetworkManager:
         try:
             # 重启 NetworkManager 服务
             self.base.com("systemctl restart NetworkManager.service")
+            self.logger.log(f"执行命令：systemctl restart NetworkManager.service")
             return True
         except Exception as e:
             self.logger.log(f"重启 NetworkManager 服务失败：{e}")
@@ -91,6 +92,7 @@ class NetworkManager:
         try:
             # 应用 Netplan 配置
             self.base.com("netplan apply")
+            self.logger.log(f"执行命令：netplan apply")
             return True
         except Exception as e:
             self.logger.log(f"应用 Netplan 配置失败：{e}")
