@@ -14,7 +14,7 @@ class System:
         try:
             command = f"systemctl stop unattended-upgrades"
             result = self.base.com(command)
-            self.logger.log(f"执行结果：{result}")
+            self.logger.log(f"执行命令：{command}")
             return True
         except Exception as e:
             print(f"停止无人值守升级发生错误：{e}")
@@ -26,7 +26,7 @@ class System:
         try:
             command = f"systemctl disable unattended-upgrades"
             result = self.base.com(command)
-            self.logger.log(f"执行结果：{result}")
+            self.logger.log(f"执行命令：{command}")
             return True
         except Exception as e:
             print(f"禁用无人值守升级发生错误：{e}")
@@ -68,8 +68,8 @@ class System:
         try:
             command = f"systemctl is-enabled unattended-upgrades"
             result = self.base.com(command)
-            self.logger.log(f"执行结果：{str(result)}")
-            if "disabled" in result or "non-zero" in result:
+            self.logger.log(f"执行命令：{command} 结果：{result.stdout}")
+            if "disabled" in result.stdout or "non-zero" in result.stdout:
                 return True
             else:
                 return False
@@ -84,10 +84,10 @@ class System:
             command1 = f"apt-config dump APT::Periodic::Update-Package-Lists"
             command2 = f"apt-config dump APT::Periodic::Unattended-Upgrade"
             result_Update_Package_Lists = self.base.com(command1)
-            self.logger.log(f"执行结果：{result_Update_Package_Lists}")
+            self.logger.log(f"执行结果：{result_Update_Package_Lists.stdout}")
             result_Unattended_Upgrade = self.base.com(command2)
-            self.logger.log(f"执行结果：{result_Unattended_Upgrade}")
-            if "0" not in result_Update_Package_Lists and result_Unattended_Upgrade:
+            self.logger.log(f"执行结果：{result_Unattended_Upgrade.stdout}")
+            if "0" not in result_Update_Package_Lists.stdout and "0" not in result_Unattended_Upgrade.stdout:
                 return False
             else:
                 return True
@@ -100,8 +100,8 @@ class System:
     def display_system_status(self):
         try:
             # 服务名称
-            services = ["drbd", "linstor-controller", "rtslib-fb-targetctl",
-                        "linstor-satellite", "pacemaker", "corosync"]
+            services = ["unattended-upgrades", "linstor-controller",
+                        "linstor-satellite", "rtslib-fb-targetctl", "pacemaker", "corosync"]
 
             # 创建一个 PrettyTable 来展示状态
             status_table = PrettyTable()
@@ -127,7 +127,8 @@ class System:
     def get_service_active_status(self, service_name):
         try:
             command = f"systemctl is-active {service_name}"
-            result = self.base.com(command)
+            result = self.base.com(command).stdout
+            self.logger.log(f"执行命令：{command} 结果：{result}")
             return result.strip()  # 去掉首尾空白字符
         except Exception as e:
             return f"Error: {str(e)}"
@@ -136,7 +137,8 @@ class System:
     def get_service_enabled_status(self, service_name):
         try:
             command = f"systemctl is-enabled {service_name}"
-            result = self.base.com(command)
+            result = self.base.com(command).stdout
+            self.logger.log(f"执行命令：{command} 结果：{result}")
             return result.strip()  # 去掉首尾空白字符
         except Exception as e:
             return f"Error: {str(e)}"
