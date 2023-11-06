@@ -5,7 +5,7 @@ from network_manager import NetworkManager
 from system import System
 from log_record import Logger
 from targetcli import TargetCLIConfig
-from verSDS import VersaSDS
+from versds import VersaSDS
 
 # 禁用系统自动升级
 
@@ -73,7 +73,7 @@ def initialize_targetcli_configuration(targetcli):
     note = "初始化 targetcli 配置失败"
     if not targetcli.configure_targetcli("auto_add_default_portal=false"):
         print(note)
-    elif not targetcli.check_targetcli_configuration("auto_add_default_portale"):
+    elif not targetcli.check_targetcli_configuration("auto_add_default_portal"):
         print(note)
     if not targetcli.configure_targetcli("auto_add_mapped_luns=false"):
         print(note)
