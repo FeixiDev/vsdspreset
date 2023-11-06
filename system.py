@@ -40,11 +40,6 @@ class System:
             self.logger.log(f"修改配置文件参数：{file_path}")
             new_content = ""
 
-            # 修改权限
-            command = (f"chmod 666 {file_path}")
-            self.base.com(command)
-            self.logger.log(f"修改{file_path}文件权限为666")
-
             # 打开文件并读取内容
             with open(file_path, 'r') as file:
                 lines = file.readlines()
@@ -61,11 +56,6 @@ class System:
             # 打开文件并写入修改后的内容
             with open(file_path, 'w') as file:
                 file.write(new_content)
-
-            # 修改权限
-            command = (f"chmod 644 {file_path}")
-            self.base.com(command)
-            self.logger.log(f"修改{file_path}文件权限为644")
 
             return True
         except Exception as e:
