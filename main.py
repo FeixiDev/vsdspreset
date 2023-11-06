@@ -13,8 +13,12 @@ from versds import VersaSDS
 def disable_system_upgrades(system):
     if not system.stop_unattended_upgrades():
         print("程序将继续执行")
+    else:
+        print("停止无人值守升级成功")
     if not system.disable_unattended_upgrades():
         print("程序将继续执行")
+    else:
+        print("禁用无人值守升级成功")
     if not system.check_unattended_upgrades():
         print("禁用无人值守升级失败，程序将继续执行")
     if not system.modify_configuration_file_parameters():
@@ -29,16 +33,28 @@ def disable_VersaSDS_service_startup(versds):
 
     if not versds.disable_service("drbd"):
         print(f"禁用drbd程序执行失败，{note}")
+    else:
+        print("禁用drbd程序执行成功")
     if not versds.disable_service("linstor-controller"):
         print(f"禁用linstor-controller程序执行失败，{note}")
+    else:
+        print("禁用linstor-controller程序执行成功")
     if not versds.disable_service("rtslib-fb-targetctl"):
         print(f"禁用rtslib-fb-targetctl程序执行失败，{note}")
+    else:
+        print("禁用rtslib-fb-targetctl程序执行成功")
     if not versds.disable_service("linstor-satellite"):
         print(f"禁用linstor-satellite程序执行失败，{note}")
+    else:
+        print("禁用linstor-satellite程序执行成功")
     if not versds.disable_service("pacemaker"):
         print(f"禁用pacemaker程序执行失败，{note}")
+    else:
+        print("禁用pacemaker程序执行成功")
     if not versds.disable_service("corosync"):
         print(f"禁用corosync程序执行失败，{note}")
+    else:
+        print("禁用corosync程序执行成功")
 
     # 调用通用方法检查不同的服务
     if not versds.is_service_disabled("drbd"):
@@ -65,6 +81,8 @@ def setup_network_manager(network_manager):
         print(f"修改01-netcfg.yaml失败")
     if not network_manager.apply_netplan_config():
         print(f"应用 Netplan 配置失败")
+    else:
+        print("配置网络管理成功")
 
 # 初始化 targetcli 配置
 
@@ -72,17 +90,17 @@ def setup_network_manager(network_manager):
 def initialize_targetcli_configuration(targetcli):
     note = "初始化 targetcli 配置失败"
     if not targetcli.configure_targetcli("auto_add_default_portal=false"):
-        print(note)
+        print(f"1 {note}")
     elif not targetcli.check_targetcli_configuration("auto_add_default_portal"):
-        print(note)
+        print(f"2 {note}")
     if not targetcli.configure_targetcli("auto_add_mapped_luns=false"):
-        print(note)
+        print(f"3 {note}")
     elif not targetcli.check_targetcli_configuration("auto_add_mapped_luns"):
-        print(note)
+        print(f"4 {note}")
     if not targetcli.configure_targetcli("auto_enable_tpgt=true"):
-        print(note)
+        print(f"5 {note}")
     elif not targetcli.check_targetcli_configuration("auto_enable_tpgt"):
-        print(note)
+        print(f"6 {note}")
 
 
 def display_system_status(system):
