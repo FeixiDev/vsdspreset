@@ -11,7 +11,7 @@ class Base:
     def com(self, command):
         try:
             result = subprocess.run(
-                command, stdout=subprocess.PIPE, shell=True, check=True, text=True).stdout
+                command, stdout=subprocess.PIPE, shell=True, text=True).stdout
             self.logger.log(f"执行命令：{command}")
             return result
         except subprocess.CalledProcessError as e:
