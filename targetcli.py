@@ -23,19 +23,21 @@ class TargetCLIConfig:
             # 检查 targetcli 配置
             command = f"sudo targetcli get global {buffer}"
 
-            if buffer == "auto_add_default_portal" or "auto_add_mapped_luns":
+            if buffer == "auto_add_default_portal" or buffer == "auto_add_mapped_luns":
                 if "false" not in self.base.com(command):
                     self.logger.log(f"auto_add_default_portal配置失败：{command}")
                     return False
                 else:
+                    print(f"检查 {buffer} 通过")
                     return True
-            if buffer == "auto_enable_tpgt":
-                if "True" not in self.base.com(command):
+            elif buffer == "auto_enable_tpgt":
+                if "true" not in self.base.com(command):
                     self.logger.log(f"auto_enable_tpgt配置失败：{command}")
                     return False
                 else:
+                    print(f"检查 {buffer} 通过")
                     return True
-
+            buffer = None
         except Exception as e:
             self.logger.log(f"检查 targetcli 配置失败: {e}")
             return False
