@@ -12,7 +12,7 @@ class System:
     # 停止无人值守升级
     def stop_unattended_upgrades(self):
         try:
-            command = f"sudo systemctl stop unattended-upgrades"
+            command = f"systemctl stop unattended-upgrades"
             result = self.base.com(command)
             self.logger.log(f"执行结果：{result}")
             return True
@@ -24,7 +24,7 @@ class System:
     # 禁用无人值守升级
     def disable_unattended_upgrades(self):
         try:
-            command = f"sudo systemctl disable unattended-upgrades"
+            command = f"systemctl disable unattended-upgrades"
             result = self.base.com(command)
             self.logger.log(f"执行结果：{result}")
             return True
@@ -41,7 +41,7 @@ class System:
             new_content = ""
 
             # 修改权限
-            command = (f"sudo chmod 666 {file_path}")
+            command = (f"chmod 666 {file_path}")
             self.base.com(command)
             self.logger.log(f"修改{file_path}文件权限为666")
 
@@ -63,7 +63,7 @@ class System:
                 file.write(new_content)
 
             # 修改权限
-            command = (f"sudo chmod 644 {file_path}")
+            command = (f"chmod 644 {file_path}")
             self.base.com(command)
             self.logger.log(f"修改{file_path}文件权限为644")
 
@@ -76,7 +76,7 @@ class System:
     # 检查是否禁用无人值守升级成功
     def check_unattended_upgrades(self):
         try:
-            command = f"sudo systemctl is-enabled unattended-upgrades"
+            command = f"systemctl is-enabled unattended-upgrades"
             result = self.base.com(command)
             self.logger.log(f"执行结果：{str(result)}")
             if "disabled" in result or "non-zero" in result:
@@ -91,8 +91,8 @@ class System:
     # 检查配置文件参数是否修改成功
     def check_configuration_file(self):
         try:
-            command1 = f"sudo apt-config dump APT::Periodic::Update-Package-Lists"
-            command2 = f"sudo apt-config dump APT::Periodic::Unattended-Upgrade"
+            command1 = f"apt-config dump APT::Periodic::Update-Package-Lists"
+            command2 = f"apt-config dump APT::Periodic::Unattended-Upgrade"
             result_Update_Package_Lists = self.base.com(command1)
             self.logger.log(f"执行结果：{result_Update_Package_Lists}")
             result_Unattended_Upgrade = self.base.com(command2)
@@ -136,7 +136,7 @@ class System:
     # 获取服务的活动状态
     def get_service_active_status(self, service_name):
         try:
-            command = f"sudo systemctl is-active {service_name}"
+            command = f"systemctl is-active {service_name}"
             result = self.base.com(command)
             return result.strip()  # 去掉首尾空白字符
         except Exception as e:
@@ -145,7 +145,7 @@ class System:
     # 获取服务的开机自启状态
     def get_service_enabled_status(self, service_name):
         try:
-            command = f"sudo systemctl is-enabled {service_name}"
+            command = f"systemctl is-enabled {service_name}"
             result = self.base.com(command)
             return result.strip()  # 去掉首尾空白字符
         except Exception as e:
