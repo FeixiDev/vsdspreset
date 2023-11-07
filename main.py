@@ -106,19 +106,23 @@ def initialize_targetcli_configuration(targetcli):
 def display_system_status(system):
     system.display_system_status()
 
+def display_version():
+    print("version: v1.0.0")
 
 def main():
     parser = argparse.ArgumentParser(description='None')
-    parser.add_argument('-d', action='store_true',
+    parser.add_argument('-d', '--display', action='store_true',
                         help='Enable display_system_status')
-    parser.add_argument('-u', action='store_true',
+    parser.add_argument('-u', '--upgrade', action='store_true',
                         help='Disable system upgrades')
-    parser.add_argument('-v', action='store_true',
+    parser.add_argument('-s', '--service', action='store_true',
                         help='Disable VersaSDS service startup')
-    parser.add_argument('-n', action='store_true',
+    parser.add_argument('-n', '--network', action='store_true',
                         help='Setup Network Manager')
-    parser.add_argument('-i', action='store_true',
+    parser.add_argument('-i', '--initialize', action='store_true',
                         help='Initialize TargetCLI Configuration')
+    parser.add_argument('-v', '--version', action='store_true',
+                        help='Show version information')
     args = parser.parse_args()
 
     logger = Logger("log")
@@ -127,16 +131,18 @@ def main():
     network_manager = NetworkManager(logger)
     targetcli = TargetCLIConfig(logger)
 
-    if args.u:
+    if args.upgrade:
         disable_system_upgrades(system)
-    elif args.v:
+    elif args.service:
         disable_VersaSDS_service_startup(versds)
-    elif args.n:
+    elif args.network:
         setup_network_manager(network_manager)
-    elif args.i:
+    elif args.initialize:
         initialize_targetcli_configuration(targetcli)
-    elif args.d:
+    elif args.display:
         display_system_status(system)
+    elif args.version:
+        display_version()
     else:
         disable_system_upgrades(system)
         disable_VersaSDS_service_startup(versds)
