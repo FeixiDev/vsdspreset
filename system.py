@@ -40,6 +40,12 @@ class System:
             self.logger.log(f"修改配置文件参数：{file_path}")
             new_content = ""
 
+            # 检查文件是否存在             ///////////////
+            if not os.path.exists(file_path):
+                self.logger.log(f"文件 {file_path} 不存在")
+                print(f"文件 {file_path} 不存在")
+                return False
+        
             # 打开文件并读取内容
             with open(file_path, 'r') as file:
                 lines = file.readlines()
