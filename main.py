@@ -8,68 +8,46 @@ from targetcli import TargetCLIConfig
 from versds import VersaSDS
 
 # 禁用系统自动升级
-
-
 def disable_system_upgrades(system):
-    if not system.stop_unattended_upgrades():
-        print("程序将继续执行")
-    else:
-        print("停止无人值守升级成功")
-    if not system.disable_unattended_upgrades():
-        print("程序将继续执行")
-    else:
-        print("禁用无人值守升级成功")
-    if not system.check_unattended_upgrades():
+    if system.stop_unattended_upgrades() and system.disable_unattended_upgrades():
+        if not system.check_unattended_upgrades():
+            print("禁用无人值守升级失败，程序将继续执行")
+        else:
+            print("禁用无人值守升级成功")
+    else: 
         print("禁用无人值守升级失败，程序将继续执行")
-    if not system.modify_configuration_file_parameters():
-        print("程序将继续执行")
-    if not system.check_configuration_file():
-        print("配置文件参数修改失败，程序将继续执行")
 
+    if system.modify_configuration_file_parameters():
+        if not system.check_configuration_file():
+            print("配置文件参数修改失败，程序将继续执行后面内容")
+        else:
+            print("配置文件参数修改成功")
+    else:
+        print("配置文件参数修改失败，程序将继续执行后面内容")
+
+    print("done")
 
 # 禁用 VersaSDS 服务开机自启
 def disable_VersaSDS_service_startup(versds):
     note = "程序将继续执行后续部分"
+    services_to_disable = [
+        "drbd",
+        "linstor-controller",
+        "rtslib-fb-targetctl",
+        "linstor-satellite",
+        "pacemaker",
+        "corosync"
+    ]
 
-    if not versds.disable_service("drbd"):
-        print(f"禁用drbd程序执行失败，{note}")
-    else:
-        print("禁用drbd程序执行成功")
-    if not versds.disable_service("linstor-controller"):
-        print(f"禁用linstor-controller程序执行失败，{note}")
-    else:
-        print("禁用linstor-controller程序执行成功")
-    if not versds.disable_service("rtslib-fb-targetctl"):
-        print(f"禁用rtslib-fb-targetctl程序执行失败，{note}")
-    else:
-        print("禁用rtslib-fb-targetctl程序执行成功")
-    if not versds.disable_service("linstor-satellite"):
-        print(f"禁用linstor-satellite程序执行失败，{note}")
-    else:
-        print("禁用linstor-satellite程序执行成功")
-    if not versds.disable_service("pacemaker"):
-        print(f"禁用pacemaker程序执行失败，{note}")
-    else:
-        print("禁用pacemaker程序执行成功")
-    if not versds.disable_service("corosync"):
-        print(f"禁用corosync程序执行失败，{note}")
-    else:
-        print("禁用corosync程序执行成功")
-
-    # 调用通用方法检查不同的服务
-    if not versds.is_service_disabled("drbd"):
-        print(f"禁用drbd服务失败，{note}")
-    if not versds.is_service_disabled("linstor-controller"):
-        print(f"禁用linstor-controller服务失败，{note}")
-    if not versds.is_service_disabled("rtslib-fb-targetctl"):
-        print(f"禁用rtslib-fb-targetctl服务失败，{note}")
-    if not versds.is_service_disabled("linstor-satellite"):
-        print(f"禁用linstor-satellite服务失败，{note}")
-    if not versds.is_service_disabled("pacemaker"):
-        print(f"禁用pacemaker服务失败，{note}")
-    if not versds.is_service_disabled("corosync"):
-        print(f"禁用corosync服务失败，{note}")
-
+    for service in services_to_disable:
+        if versds.disable_service(service):
+            if not versds.is_service_disabled(service):
+                print(f"禁用{service}服务失败，{note}")
+            else:
+                print(f"禁用{service}服务成功")
+        else:
+            print(f"禁用{service}服务失败，{note}")
+    print("done")
 
 # 配置 Network Manager
 def setup_network_manager(network_manager):
@@ -84,35 +62,38 @@ def setup_network_manager(network_manager):
     else:
         print("配置网络管理成功")
 
+    print("done")
+
 # 初始化 targetcli 配置
 
 
 def initialize_targetcli_configuration(targetcli):
+    config_items = [
+        ("auto_add_default_portal=false", "auto_add_default_portal"),
+        ("auto_add_mapped_luns=false", "auto_add_mapped_luns"),
+        ("auto_enable_tpgt=true", "auto_enable_tpgt")
+    ]
     note = "初始化 targetcli 配置失败"
-    if not targetcli.configure_targetcli("auto_add_default_portal=false"):
-        print(f"1 {note}")
-    elif not targetcli.check_targetcli_configuration("auto_add_default_portal"):
-        print(f"2 {note}")
-    if not targetcli.configure_targetcli("auto_add_mapped_luns=false"):
-        print(f"3 {note}")
-    elif not targetcli.check_targetcli_configuration("auto_add_mapped_luns"):
-        print(f"4 {note}")
-    if not targetcli.configure_targetcli("auto_enable_tpgt=true"):
-        print(f"5 {note}")
-    elif not targetcli.check_targetcli_configuration("auto_enable_tpgt"):
-        print(f"6 {note}")
 
+    for config_value, config_name in config_items:
+        if not targetcli.configure_targetcli(config_value):
+            print(f"{config_name}: {note}")
+        elif not targetcli.check_targetcli_configuration(config_name):
+            print(f"{config_name}: {note}")
+
+    print("done")
 
 def display_system_status(system):
     system.display_system_status()
+    print("done")
 
 def display_version():
     print("version: v1.0.0")
 
 def main():
     parser = argparse.ArgumentParser(description='None')
-    parser.add_argument('-d', '--display', action='store_true',
-                        help='Enable display_system_status')
+    parser.add_argument('-d', '--display', action='store_true', 
+                        help=argparse.SUPPRESS)
     parser.add_argument('-u', '--upgrade', action='store_true',
                         help='Disable system upgrades')
     parser.add_argument('-s', '--service', action='store_true',
