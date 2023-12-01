@@ -1,5 +1,6 @@
 #! /usr/bin/env python3
 import os
+import shutil
 from base import Base
 
 
@@ -26,7 +27,17 @@ class NetworkManager:
             if file.endswith('.yaml'):
                 # 找到第一个以 .yaml 结尾的文件，即主要配置文件
                 self.netplan_file = os.path.join(self.netplan_dir, file)
+                
+                # 备份原始文件
+                self.backup_config()
+
                 break
+
+    def backup_config(self):
+        if self.netplan_file:
+            command = f"cp {self.netplan_file} {self.netplan_file}.bat"
+            result = self.base.com(command)
+            self.logger.log(f"已备份{self.netplan_file}为{self.netplan_file}.bat")
 
     def set_network_manager_interfaces(self):
         try:
