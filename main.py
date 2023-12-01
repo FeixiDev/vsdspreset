@@ -104,6 +104,8 @@ def main():
                         help='Initialize TargetCLI Configuration')
     parser.add_argument('-v', '--version', action='store_true',
                         help='Show version information')
+    parser.add_argument('--skip', action='store_true',
+                        help='Skip Setup Network Manager')
     args = parser.parse_args()
 
     logger = Logger("log")
@@ -124,12 +126,15 @@ def main():
         display_system_status(system)
     elif args.version:
         display_version()
+    elif args.skip:
+        disable_system_upgrades(system)
+        disable_VersaSDS_service_startup(versds)
+        initialize_targetcli_configuration(targetcli)
     else:
         disable_system_upgrades(system)
         disable_VersaSDS_service_startup(versds)
         setup_network_manager(network_manager)
         initialize_targetcli_configuration(targetcli)
-
 
 if __name__ == '__main__':
     main()
