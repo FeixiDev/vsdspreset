@@ -58,30 +58,11 @@ class NetworkManager:
 
     def update_netplan_config(self):
         try:
-
             # 打开 netplan 配置文件进行修改
-            with open(self.netplan_file, 'r') as file:
-                lines = file.readlines()
-
-            updated_lines = []
-            delete_lines = False
-
-            for line in lines:
-                # 将 renderer:networkd 更改为 renderer:NetworkManager
-                if 'renderer: networkd' in line:
-                    updated_lines.append(line.replace(
-                        'renderer: networkd', 'renderer: NetworkManager'))
-                elif 'ethernets:' in line:
-                    delete_lines = True  # 遇到ethernets时，设置标志为True，开始删除
-                elif delete_lines and line.strip():  # 如果标志为True，且当前行不是空行
-                    continue  # 跳过该行
-                else:
-                    delete_lines = False  # 如果不是ethernets下的行，取消删除标志
-                    updated_lines.append(line)
-
-            # 将更新后的内容写回文件
             with open(self.netplan_file, 'w') as file:
-                file.writelines(updated_lines)
+                file.write("network:\n")
+                file.write("  version: 2\n")
+                file.write("  renderer: NetworkManager\n")
 
             return True
         except Exception as e:
