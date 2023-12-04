@@ -35,9 +35,9 @@ class NetworkManager:
 
     def backup_config(self):
         if self.netplan_file:
-            command = f"cp {self.netplan_file} {self.netplan_file}.bat"
+            command = f"cp {self.netplan_file} {self.netplan_file}.bak"
             result = self.base.com(command)
-            self.logger.log(f"已备份{self.netplan_file}为{self.netplan_file}.bat")
+            self.logger.log(f"已备份{self.netplan_file}为{self.netplan_file}.bak")
 
     def set_network_manager_interfaces(self):
         try:
