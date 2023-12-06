@@ -14,8 +14,6 @@ class NetworkManager:
         self.netplan_dir = '/etc/netplan'
         self.netplan_file = None
 
-        self.find_main_config()
-
     def find_main_config(self):
         # 获取目录下的所有文件
         files = os.listdir(self.netplan_dir)
@@ -30,12 +28,11 @@ class NetworkManager:
                 
                 # 备份原始文件
                 self.backup_config()
-
-                break
+                return self.netplan_file
 
     def backup_config(self):
         if self.netplan_file:
-            command = f"cp {self.netplan_file} {self.netplan_file}.bak"
+            command = f"cp {self.netplan_file} {self.netplan_file}.vsds_bak"
             result = self.base.com(command)
             self.logger.log(f"已备份{self.netplan_file}为{self.netplan_file}.bak")
 
@@ -54,7 +51,7 @@ class NetworkManager:
 
             return True
         except Exception as e:
-            print(f"配置 NetworkManager 管理接口失败：{e}")
+            print(f"ERROR - 配置 NetworkManager 管理接口失败：{e}")
             return False
 
     def restart_network_manager_service(self):
@@ -64,11 +61,13 @@ class NetworkManager:
             self.logger.log(f"执行命令：systemctl restart NetworkManager.service")
             return True
         except Exception as e:
-            self.logger.log(f"重启 NetworkManager 服务失败：{e}")
+            self.logger.log(f"ERROR - 重启 NetworkManager 服务失败：{e}")
             return False
 
     def update_netplan_config(self):
         try:
+            self.netplan_file = self.find_main_config()
+
             # 打开 netplan 配置文件进行修改
             with open(self.netplan_file, 'w') as file:
                 file.write("network:\n")
@@ -77,7 +76,7 @@ class NetworkManager:
 
             return True
         except Exception as e:
-            self.logger.log(f"修改 Netplan 配置失败：{e}")
+            self.logger.log(f"ERROR - 修改 Netplan 配置失败：{e}")
             return False
 
     def apply_netplan_config(self):
@@ -87,5 +86,5 @@ class NetworkManager:
             self.logger.log(f"执行命令：netplan apply")
             return True
         except Exception as e:
-            self.logger.log(f"应用 Netplan 配置失败：{e}")
+            self.logger.log(f"ERROR - 应用 Netplan 配置失败：{e}")
             return False

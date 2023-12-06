@@ -18,7 +18,7 @@ class System:
             return True
         except Exception as e:
             print(f"停止无人值守升级发生错误：{e}")
-            self.logger.log(f"停止无人值守升级发生错误：{e}")  # debug
+            self.logger.log(f"ERROR - 停止无人值守升级发生错误：{e}")  # debug
             return False
 
     # 禁用无人值守升级
@@ -30,7 +30,7 @@ class System:
             return True
         except Exception as e:
             print(f"禁用无人值守升级发生错误：{e}")
-            self.logger.log(f"禁用无人值守升级发生错误：{e}")  # debug
+            self.logger.log(f"ERROR - 禁用无人值守升级发生错误：{e}")  # debug
             return False
 
     # 修改配置文件参数
@@ -42,7 +42,7 @@ class System:
 
             # 检查文件是否存在             ///////////////
             if not os.path.exists(file_path):
-                self.logger.log(f"文件 {file_path} 不存在")
+                self.logger.log(f"ERROR - 文件 {file_path} 不存在")
                 print(f"文件 {file_path} 不存在")
                 return False
         
@@ -66,7 +66,7 @@ class System:
             return True
         except Exception as e:
             print(f"修改配置文件参数发生错误：{e}")
-            self.logger.log(f"修改配置文件参数发生错误：{e}")  # debug
+            self.logger.log(f"ERROR - 修改配置文件参数发生错误：{e}")  # debug
             return False
 
     # 检查是否禁用无人值守升级成功
@@ -81,7 +81,7 @@ class System:
                 return False
         except Exception as e:
             print(f"检查是否禁用无人值守升级发生错误：{e}")
-            self.logger.log(f"检查是否禁用无人值守升级发生错误：{e}")  # debug
+            self.logger.log(f"ERROR - 检查是否禁用无人值守升级发生错误：{e}")  # debug
             return False
 
     # 检查配置文件参数是否修改成功
@@ -99,7 +99,7 @@ class System:
                 return True
         except Exception as e:
             print(f"检查配置文件参数是否修改成功发生错误：{e}")
-            self.logger.log(f"检查配置文件参数是否修改成功发生错误：{e}")  # debug
+            self.logger.log(f"ERROR - 检查配置文件参数是否修改成功发生错误：{e}")  # debug
             return False
     # 显示系统状态
 
@@ -123,28 +123,28 @@ class System:
             # 打印系统状态
             print("System Status:")
             print(status_table)
-            self.logger.log("System Status displayed")
+            self.logger.log(f"System Status displayed\n{status_table}")
 
         except Exception as e:
             print(f"显示系统状态发生错误：{e}")
-            self.logger.log(f"显示系统状态发生错误：{e}")
+            self.logger.log(f"ERROR - 显示系统状态发生错误：{e}")
 
     # 获取服务的活动状态
     def get_service_active_status(self, service_name):
         try:
             command = f"systemctl is-active {service_name}"
-            result = self.base.com(command).stdout
+            result = self.base.com(command).stdout.strip()
             self.logger.log(f"执行命令：{command} 结果：{result}")
             return result.strip()  # 去掉首尾空白字符
         except Exception as e:
-            return f"Error: {str(e)}"
+            return f"ERROR - {str(e)}"
 
     # 获取服务的开机自启状态
     def get_service_enabled_status(self, service_name):
         try:
             command = f"systemctl is-enabled {service_name}"
-            result = self.base.com(command).stdout
+            result = self.base.com(command).stdout.strip()
             self.logger.log(f"执行命令：{command} 结果：{result}")
             return result.strip()  # 去掉首尾空白字符
         except Exception as e:
-            return f"Error: {str(e)}"
+            return f"ERROR - {str(e)}"

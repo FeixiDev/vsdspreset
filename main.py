@@ -85,7 +85,6 @@ def initialize_targetcli_configuration(targetcli):
 
 def display_system_status(system):
     system.display_system_status()
-    print("done")
 
 def display_version():
     print("version: v1.0.0")
@@ -108,7 +107,7 @@ def main():
                         help='Skip Setup Network Manager')
     args = parser.parse_args()
 
-    logger = Logger("log")
+    logger = Logger("vsdspreset")
     system = System(logger)
     versds = VersaSDS(logger)
     network_manager = NetworkManager(logger)
