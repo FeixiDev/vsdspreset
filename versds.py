@@ -16,7 +16,7 @@ class VersaSDS:
             return True
         except Exception as e:
             print(f"禁用{service_name}发生错误：{e}")
-            self.logger.log(f"禁用{service_name}发生错误：{e}")  # debug
+            self.logger.log(f"ERROR - 禁用{service_name}发生错误：{e}")  # debug
             return False
 
     # 检查服务是否已禁用
@@ -33,5 +33,5 @@ class VersaSDS:
                 return False
         except Exception as e:
             print(f"检查{service_name}状态发生错误：{e}")
-            self.logger.log(f"检查{service_name}状态发生错误：{e}")  # debug
+            self.logger.log(f"ERROR - 检查{service_name}状态发生错误：{e}")  # debug
             return False
