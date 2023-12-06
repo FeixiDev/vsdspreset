@@ -15,7 +15,7 @@ class TargetCLIConfig:
             self.logger.log(f"执行命令：{command}")
             return True
         except Exception as e:
-            self.logger.log(f"配置targetcli失败: {e}")
+            self.logger.log(f"ERROR - 配置targetcli失败: {e}")
             return False
 
     def check_targetcli_configuration(self, buffer):
@@ -25,7 +25,7 @@ class TargetCLIConfig:
 
             if buffer == "auto_add_default_portal" or buffer == "auto_add_mapped_luns":
                 if "false" not in self.base.com(command).stdout:
-                    self.logger.log(f"auto_add_default_portal配置失败：{command}")
+                    self.logger.log(f"ERROR - auto_add_default_portal配置失败：{command}")
                     return False
                 else:
                     self.logger.log(f"执行命令：{command} 结果：{self.base.com(command).stdout}")
@@ -33,7 +33,7 @@ class TargetCLIConfig:
                     return True
             elif buffer == "auto_enable_tpgt":
                 if "true" not in self.base.com(command).stdout:
-                    self.logger.log(f"auto_enable_tpgt配置失败：{command}")
+                    self.logger.log(f"ERROR - auto_enable_tpgt配置失败：{command}")
                     return False
                 else:
                     self.logger.log(f"执行命令：{command} 结果：{self.base.com(command).stdout}")
@@ -41,5 +41,5 @@ class TargetCLIConfig:
                     return True
             buffer = None
         except Exception as e:
-            self.logger.log(f"检查 targetcli 配置失败: {e}")
+            self.logger.log(f"ERROR - 检查 targetcli 配置失败: {e}")
             return False
