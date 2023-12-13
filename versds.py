@@ -24,12 +24,12 @@ class VersaSDS:
         try:
             command = f"systemctl is-enabled {service_name}"
             result = self.base.com(command).stdout
-            self.logger.log(f"执行命令：{command} 结果：{result}")
+            self.logger.log(f"执行命令：{command} 结果：{result.strip()}")
             if result.strip() == "disabled":
-                self.logger.log(f"{service_name} 已禁用")
+                self.logger.log(f"{service_name} 已禁用\n")
                 return True
             else:
-                self.logger.log(f"{service_name} 未禁用")
+                self.logger.log(f"ERROR - {service_name} 禁用失败")
                 return False
         except Exception as e:
             print(f"检查{service_name}状态发生错误：{e}")
