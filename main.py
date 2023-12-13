@@ -90,7 +90,7 @@ def display_version():
     print("version: v1.0.0")
 
 def main():
-    parser = argparse.ArgumentParser(description='None')
+    parser = argparse.ArgumentParser(description='vsdspreset')
     parser.add_argument('-d', '--display', action='store_true', 
                         help=argparse.SUPPRESS)
     parser.add_argument('-u', '--upgrade', action='store_true',
