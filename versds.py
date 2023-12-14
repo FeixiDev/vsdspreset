@@ -29,7 +29,7 @@ class VersaSDS:
                 self.logger.log(f"{service_name} 已禁用\n")
                 return True
             else:
-                self.logger.log(f"ERROR - {service_name} 禁用失败")
+                self.logger.log(f"ERROR - {service_name} 禁用失败\n")
                 return False
         except Exception as e:
             print(f"检查{service_name}状态发生错误：{e}")

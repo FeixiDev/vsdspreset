@@ -34,7 +34,7 @@ class NetworkManager:
         if self.netplan_file:
             command = f"cp {self.netplan_file} {self.netplan_file}.vsds_bak"
             result = self.base.com(command)
-            self.logger.log(f"已备份{self.netplan_file}为{self.netplan_file}.bak")
+            self.logger.log(f"已备份{self.netplan_file}为{self.netplan_file}.vsds_bak")
 
     def set_network_manager_interfaces(self):
         try:
@@ -83,7 +83,7 @@ class NetworkManager:
         try:
             # 应用 Netplan 配置
             self.base.com("netplan apply")
-            self.logger.log(f"执行命令：netplan apply")
+            self.logger.log(f"执行命令：netplan apply\n")
             return True
         except Exception as e:
             self.logger.log(f"ERROR - 应用 Netplan 配置失败：{e}")
