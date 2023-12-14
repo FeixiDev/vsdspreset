@@ -74,14 +74,14 @@ class System:
         try:
             command = f"systemctl is-enabled unattended-upgrades"
             result = self.base.com(command)
-            self.logger.log(f"执行命令：{command} 结果：{result.stdout}")
+            self.logger.log(f"执行命令：{command} 结果：{result.stdout.strip()}")
             if "disabled" in result.stdout or "non-zero" in result.stdout:
                 return True
             else:
                 return False
         except Exception as e:
             print(f"检查是否禁用无人值守升级发生错误：{e}")
-            self.logger.log(f"ERROR - 检查是否禁用无人值守升级发生错误：{e}")  # debug
+            self.logger.log(f"ERROR - 检查是否禁用无人值守升级发生错误：{e}\n")  # debug
             return False
 
     # 检查配置文件参数是否修改成功
@@ -90,9 +90,9 @@ class System:
             command1 = f"apt-config dump APT::Periodic::Update-Package-Lists"
             command2 = f"apt-config dump APT::Periodic::Unattended-Upgrade"
             result_Update_Package_Lists = self.base.com(command1)
-            self.logger.log(f"执行结果：{result_Update_Package_Lists.stdout}")
+            self.logger.log(f"执行结果：{result_Update_Package_Lists.stdout.strip()}")
             result_Unattended_Upgrade = self.base.com(command2)
-            self.logger.log(f"执行结果：{result_Unattended_Upgrade.stdout}")
+            self.logger.log(f"执行结果：{result_Unattended_Upgrade.stdout.strip()}")
             if "0" not in result_Update_Package_Lists.stdout and "0" not in result_Unattended_Upgrade.stdout:
                 return False
             else:
