@@ -75,6 +75,7 @@ class System:
             command = f"systemctl is-enabled unattended-upgrades"
             result = self.base.com(command)
             self.logger.log(f"执行命令：{command} 结果：{result.stdout.strip()}")
+            self.logger.space()
             if "disabled" in result.stdout or "non-zero" in result.stdout:
                 return True
             else:

@@ -1,7 +1,7 @@
 #! /usr/bin/env python3
 
 import argparse
-from network_manager import NetworkManager
+import sys
 from system import System
 from log_record import Logger
 from targetcli import TargetCLIConfig
@@ -29,40 +29,23 @@ def disable_system_upgrades(system):
 
 # 禁用 VersaSDS 服务开机自启
 def disable_VersaSDS_service_startup(versds):
-    note = "程序将继续执行后续部分"
-    services_to_disable = [
-        "drbd",
-        "linstor-controller",
-        "rtslib-fb-targetctl",
-        "linstor-satellite",
-        "pacemaker",
-        "corosync"
-    ]
-
-    for service in services_to_disable:
-        if versds.disable_service(service):
-            if not versds.is_service_disabled(service):
-                print(f"禁用{service}服务失败，{note}")
-            else:
-                print(f"禁用{service}服务成功")
-        else:
-            print(f"禁用{service}服务失败，{note}")
+    versds.implementation_methods()
     print("done")
 
 # 配置 Network Manager
-def setup_network_manager(network_manager):
-    if not network_manager.set_network_manager_interfaces():
-        print(f"修改NetworkManager.conf失败")
-    if not network_manager.restart_network_manager_service():
-        print(f"重启NetworkManager服务失败")
-    if not network_manager.update_netplan_config():
-        print(f"修改01-netcfg.yaml失败")
-    if not network_manager.apply_netplan_config():
-        print(f"应用 Netplan 配置失败")
-    else:
-        print("配置网络管理成功")
+# def setup_network_manager(network_manager):
+#     if not network_manager.set_network_manager_interfaces():
+#         print(f"修改NetworkManager.conf失败")
+#     if not network_manager.restart_network_manager_service():
+#         print(f"重启NetworkManager服务失败")
+#     if not network_manager.update_netplan_config():
+#         print(f"修改01-netcfg.yaml失败")
+#     if not network_manager.apply_netplan_config():
+#         print(f"应用 Netplan 配置失败")
+#     else:
+#         print("配置网络管理成功")
 
-    print("done")
+#     print("done")
 
 # 初始化 targetcli 配置
 
@@ -87,7 +70,7 @@ def display_system_status(system):
     system.display_system_status()
 
 def display_version():
-    print("version: v1.0.0")
+    print("version: v1.0.1")
 
 def main():
     parser = argparse.ArgumentParser(description='vsdspreset')
@@ -97,42 +80,40 @@ def main():
                         help='Disable system upgrades')
     parser.add_argument('-s', '--service', action='store_true',
                         help='Disable VersaSDS service startup')
-    parser.add_argument('-n', '--network', action='store_true',
-                        help='Setup Network Manager')
+    # parser.add_argument('-n', '--network', action='store_true',
+                        # help='Setup Network Manager')
     parser.add_argument('-i', '--initialize', action='store_true',
                         help='Initialize TargetCLI Configuration')
     parser.add_argument('-v', '--version', action='store_true',
                         help='Show version information')
-    parser.add_argument('--skip', action='store_true',
-                        help='Skip Setup Network Manager')
+    # parser.add_argument('--skip', action='store_true',
+    #                     help='Skip Setup Network Manager')
     args = parser.parse_args()
+
+    if args.version:
+        display_version()
+        sys.exit()
 
     logger = Logger("vsdspreset")
     system = System(logger)
     versds = VersaSDS(logger)
-    network_manager = NetworkManager(logger)
+    # network_manager = NetworkManager(logger)
     targetcli = TargetCLIConfig(logger)
 
     if args.upgrade:
         disable_system_upgrades(system)
     elif args.service:
         disable_VersaSDS_service_startup(versds)
-    elif args.network:
-        setup_network_manager(network_manager)
+    # elif args.network:
+    #     setup_network_manager(network_manager)
     elif args.initialize:
         initialize_targetcli_configuration(targetcli)
     elif args.display:
         display_system_status(system)
-    elif args.version:
-        display_version()
-    elif args.skip:
-        disable_system_upgrades(system)
-        disable_VersaSDS_service_startup(versds)
-        initialize_targetcli_configuration(targetcli)
     else:
         disable_system_upgrades(system)
         disable_VersaSDS_service_startup(versds)
-        setup_network_manager(network_manager)
+        # setup_network_manager(network_manager)
         initialize_targetcli_configuration(targetcli)
 
 if __name__ == '__main__':
