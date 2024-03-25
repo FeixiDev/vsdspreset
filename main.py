@@ -32,6 +32,11 @@ def disable_VersaSDS_service_startup(versds):
     versds.implementation_methods()
     print("done")
 
+# 启用 VersaSDS 服务开机自启
+def enable_VersaSDS_service_startup(versds):
+    versds.set_service_autostart()
+    print("done")
+
 # 配置 Network Manager
 # def setup_network_manager(network_manager):
 #     if not network_manager.set_network_manager_interfaces():
@@ -70,7 +75,7 @@ def display_system_status(system):
     system.display_system_status()
 
 def display_version():
-    print("version: v1.0.1")
+    print("version: v1.0.2")
 
 def main():
     parser = argparse.ArgumentParser(description='vsdspreset')
@@ -80,6 +85,8 @@ def main():
                         help='Disable system upgrades')
     parser.add_argument('-s', '--service', action='store_true',
                         help='Disable VersaSDS service startup')
+    parser.add_argument('-e', '--enable', action='store_true',
+                        help='Enable VersaSDS service startup')
     # parser.add_argument('-n', '--network', action='store_true',
                         # help='Setup Network Manager')
     parser.add_argument('-i', '--initialize', action='store_true',
@@ -104,12 +111,14 @@ def main():
         disable_system_upgrades(system)
     elif args.service:
         disable_VersaSDS_service_startup(versds)
-    # elif args.network:
-    #     setup_network_manager(network_manager)
     elif args.initialize:
         initialize_targetcli_configuration(targetcli)
     elif args.display:
         display_system_status(system)
+    elif args.enable:
+        disable_system_upgrades(system)
+        enable_VersaSDS_service_startup(versds)
+        initialize_targetcli_configuration(targetcli)
     else:
         disable_system_upgrades(system)
         disable_VersaSDS_service_startup(versds)
